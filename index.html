@@ -348,6 +348,24 @@
     #chat-send:hover { background: var(--primary-dark); }
     #chat-send:disabled { background: var(--border); cursor: not-allowed; }
 
+    /* ===== HELPER BOT ===== */
+    .cat-btn {
+      background: var(--bg); border: 1px solid var(--border); color: var(--text);
+      padding: 8px 12px; border-radius: 8px; cursor: pointer; font-size: 12px; font-weight: 600;
+      transition: all 0.2s;
+    }
+    .cat-btn:hover { background: var(--primary-light); border-color: var(--primary); color: var(--primary); }
+    .cat-btn.active { background: var(--primary); color: white; border-color: var(--primary); }
+    #chat-search { flex: 1; padding: 10px 14px; border: 1.5px solid var(--border); border-radius: 10px; font-size: 14px; outline: none; }
+    #chat-search:focus { border-color: var(--primary); }
+    #chat-search-btn { background: var(--primary); color: var(--dark); border: none; width: 40px; height: 40px; border-radius: 10px; cursor: pointer; font-size: 16px; display: flex; align-items: center; justify-content: center; flex-shrink: 0; }
+    #chat-search-btn:hover { background: var(--primary-dark); }
+    .faq-result { background: var(--bg); border: 1px solid var(--border); border-radius: 10px; padding: 12px; margin-bottom: 10px; cursor: pointer; transition: all 0.2s; }
+    .faq-result:hover { background: var(--primary-light); border-color: var(--primary); }
+    .faq-result-cat { font-size: 11px; font-weight: 700; color: var(--primary); text-transform: uppercase; margin-bottom: 4px; }
+    .faq-result-q { font-size: 13px; font-weight: 600; color: var(--dark); margin-bottom: 6px; }
+    .faq-result-a { font-size: 12px; color: var(--text-muted); line-height: 1.5; }
+
     /* ===== RESPONSIVE ===== */
     @media (max-width: 768px) {
       nav { display: none; }
@@ -856,31 +874,37 @@
 </footer>
 
 <!-- ===== CHATBOT ===== -->
-<button id="chat-btn" onclick="toggleChat()" title="Pregúntale a Claude">
-  <i class="fas fa-robot"></i>
-  <span class="chat-label">Pregúntale a Claude</span>
+<button id="chat-btn" onclick="toggleChat()" title="Centro de Ayuda">
+  <i class="fas fa-headset"></i>
+  <span class="chat-label">Centro de Ayuda</span>
 </button>
 
 <div id="chat-panel">
   <div class="chat-header">
-    <div class="chat-avatar"><i class="fas fa-robot"></i></div>
+    <div class="chat-avatar"><i class="fas fa-headset"></i></div>
     <div class="chat-header-info">
-      <h4>Asistente Jelou</h4>
-      <p><span class="online-dot"></span>Powered by Claude · Soporte 24/7</p>
+      <h4>Centro de Ayuda</h4>
+      <p><span class="online-dot"></span>Búsqueda de FAQs · Gratis</p>
     </div>
     <button class="chat-close" onclick="toggleChat()"><i class="fas fa-xmark"></i></button>
   </div>
   <div id="chat-messages">
-    <div class="msg bot"><div class="bubble">¡Hola! Soy el asistente de soporte de Jelou, potenciado por Claude. Puedo responder preguntas sobre <strong>Connect</strong>, <strong>Brain Studio</strong>, <strong>Datum</strong>, <strong>Marketplace</strong> y más.<br><br>Para activarme, necesito tu API Key de Anthropic (se guarda solo en tu navegador).</div></div>
+    <div class="msg bot"><div class="bubble">¡Bienvenido! Explora nuestras FAQs por categoría o usa la búsqueda para encontrar respuestas rápidamente.</div></div>
   </div>
-  <div id="chat-api-setup">
-    <p>Ingresa tu <a href="https://console.anthropic.com/settings/keys" target="_blank">API Key de Anthropic</a> para activar el chatbot:</p>
-    <input type="password" id="api-key-input" placeholder="sk-ant-api03-..." />
-    <button id="api-key-btn" onclick="saveApiKey()">Activar Asistente</button>
+  <div id="chat-categories" style="padding:14px; border-top:1px solid var(--border); display:grid; grid-template-columns: 1fr 1fr; gap: 8px;">
+    <button class="cat-btn" onclick="filterCategory('Connect')">Connect</button>
+    <button class="cat-btn" onclick="filterCategory('Brain Studio')">Brain Studio</button>
+    <button class="cat-btn" onclick="filterCategory('Datum')">Datum</button>
+    <button class="cat-btn" onclick="filterCategory('Marketplace')">Marketplace</button>
+    <button class="cat-btn" onclick="filterCategory('Logs')">Logs & Debugger</button>
+    <button class="cat-btn" onclick="filterCategory('')">Ver todas</button>
   </div>
-  <div class="chat-input-area" id="chat-input-area" style="display:none">
-    <textarea id="chat-input" rows="1" placeholder="Escribe tu pregunta sobre Jelou..." onkeydown="handleChatKey(event)" oninput="autoResize(this)"></textarea>
-    <button id="chat-send" onclick="sendMessage()"><i class="fas fa-paper-plane"></i></button>
+  <div class="chat-input-area">
+    <input type="text" id="chat-search" placeholder="Buscar FAQs..." onkeyup="searchFAQs()" />
+    <button id="chat-search-btn" onclick="searchFAQs()"><i class="fas fa-search"></i></button>
+  </div>
+  <div id="chat-results" style="flex:1; overflow-y:auto; padding:14px; display:none;">
+    <div id="results-list"></div>
   </div>
 </div>
 
@@ -959,154 +983,89 @@ document.querySelectorAll('.faq-question').forEach(btn => {
   });
 });
 
-// ===== CHATBOT =====
-let apiKey = localStorage.getItem('jelou_claude_key') || '';
+// ===== HELPER BOT (SIN IA) =====
 let chatOpen = false;
-let chatHistory = [];
+let currentCategory = '';
 
-const SYSTEM_PROMPT = `Eres el asistente de soporte de Jelou.AI, especializado en responder preguntas sobre los productos Connect y Brain Studio de Jelou.
-
-CONOCIMIENTO BASE:
-CONNECT: módulo de gestión de conversaciones. Tiene Panel Multiagente (/pma/chats), Campañas (/hsm/campaigns), Monitoreo (/monitoring/live/chats), Clientes (/clients/conversation), Shop (/shop/products). Panel Multiagente: gestiona chats en tiempo real, filtros Todos/No Gestionados, envío masivo. Campañas: mensajes masivos con plantillas y variables como {{nombre}}. No se pueden editar después de enviadas. Monitoreo: métricas en tiempo real - Primera Respuesta buena < 1min, Promedio Respuesta < 1min. Clientes: base de contactos, exportación CSV/Excel. Shop: catálogo con SKU, precio, stock, categorías, imágenes.
-
-BRAIN STUDIO: plataforma visual de agentes IA sin código en apps.jelou.ai/brain. 10 nodos: AI Agent (IA), Message (mensajes), API (llamadas externas), Code (JavaScript), Logic (IF/ELSE), Datum (BD), Notes (documentación), Human Attention (escalar humano), Skills (módulos reutilizables), Tools (integraciones). Proyectos: organizan agentes con Skills, Tools y canal. Canvas: área visual de construcción. Logs (/execution-logs): registro de ejecuciones de Skills y Tools con traza paso a paso. Debugger (/debugger): conversaciones completas de usuarios, filtros por canal/fecha/mensaje/Skill ID.
-
-DATUM: base de datos clásica en /datum/databases. Datum V2 (datum.jelou.ai): plataforma avanzada con API REST, Collections, Imports, Monitor (CPU/RAM/Storage), Settings con API Keys, Triggers y MCP. MCP conecta Datum V2 con Claude, ChatGPT, Cursor, VS Code.
-
-MARKETPLACE (/marketplace): 19+ integraciones - Shopify, Stripe, WooCommerce, Mercado Pago, Bitrix24, Odoo, Contifico, Siigo, Datil, Facturama, Calendly, Supabase, Meta Ads, Jelou KYC, Jelou Sign. Pestañas: Catálogo, Instaladas, Developers (15 Skills Templates + 10 Tools Templates).
-
-INSTRUCCIONES:
-- Responde siempre en español
-- Sé conciso y directo, máximo 3-4 oraciones por respuesta
-- Si no sabes algo, dirige al usuario a docs.jelou.ai o support@jelou.ai
-- Usa markdown básico para resaltar conceptos clave
-- No inventes funcionalidades que no mencioné`;
+const faqData = [
+  { section:"Connect", q:"¿Qué es Connect?", a:"Módulo central para gestionar conversaciones, campañas, clientes y catálogo de productos." },
+  { section:"Connect – Panel Multiagente", q:"¿Qué son los chats No Gestionados?", a:"Conversaciones que aún no han recibido respuesta de ningún agente." },
+  { section:"Connect – Campañas", q:"¿Cómo envío una campaña masiva?", a:"Campañas → + Enviar campaña → completa formulario → selecciona destinatarios → confirma." },
+  { section:"Connect – Campañas", q:"¿Puedo editar una campaña enviada?", a:"No, una campaña enviada no se puede editar. Crea una nueva si necesitas cambios." },
+  { section:"Connect – Monitoreo", q:"¿Qué significa 'Por recuperar' en Monitoreo?", a:"Conversaciones abiertas que requieren acción urgente y están esperando respuesta." },
+  { section:"Connect – Shop", q:"¿Qué es el SKU?", a:"Código único de producto. Ejemplo: BOT-001, ZAPATO-NEGRO-42." },
+  { section:"Brain Studio", q:"¿Necesito programar para usar Brain Studio?", a:"No. La mayoría se hace visualmente. El nodo Code permite JavaScript para lógica avanzada." },
+  { section:"Brain Studio – Nodos", q:"¿Qué hace el nodo Logic?", a:"Crea ramificaciones IF/ELSE en el flujo basadas en condiciones y variables." },
+  { section:"Brain Studio – Proyectos", q:"¿Qué pasa si elimino un Proyecto?", a:"Se elimina permanentemente con su canvas, Skills y configuraciones. Desactiva en vez de eliminar." },
+  { section:"Datum V2", q:"¿Qué es el MCP en Datum V2?", a:"Protocolo que conecta la base de datos directamente con Claude, ChatGPT, Cursor o VS Code." },
+  { section:"Datum V2", q:"¿Cómo importo datos a Datum V2?", a:"Ícono de carga (↑) → Imports → + New Import → selecciona archivo y colección destino." },
+  { section:"Marketplace", q:"¿Qué integraciones hay en Marketplace?", a:"19+ integraciones: Shopify, Stripe, WooCommerce, Bitrix24, Calendly, Contifico, Datil, Odoo y más." },
+  { section:"Marketplace – Templates", q:"¿Qué son los Skills Templates?", a:"Flujos completos prediseñados por Jelou: biometría, firma digital, pagos, OTP, KYC, etc." },
+  { section:"Logs & Debugger", q:"¿Cuál es la diferencia entre Logs y Debugger?", a:"Logs: ejecuciones técnicas de nodos. Debugger: conversación completa del usuario final." },
+  { section:"Logs & Debugger", q:"¿Cómo encuentro en qué nodo falló un flujo?", a:"Logs → busca la ejecución → ícono 👁 → se abre la traza paso a paso por nodo." },
+];
 
 function toggleChat() {
   chatOpen = !chatOpen;
   const panel = document.getElementById('chat-panel');
   panel.classList.toggle('open', chatOpen);
   const btn = document.getElementById('chat-btn');
-  btn.innerHTML = chatOpen ? '<i class="fas fa-xmark"></i>' : '<i class="fas fa-robot"></i><span class="chat-label">Pregúntale a Claude</span>';
-  if (chatOpen) initChat();
+  btn.innerHTML = chatOpen ? '<i class="fas fa-xmark"></i>' : '<i class="fas fa-headset"></i><span class="chat-label">Centro de Ayuda</span>';
 }
 
-function initChat() {
-  if (apiKey) {
-    document.getElementById('chat-api-setup').style.display = 'none';
-    document.getElementById('chat-input-area').style.display = 'flex';
-    document.getElementById('chat-input').focus();
+function filterCategory(cat) {
+  currentCategory = cat;
+  document.querySelectorAll('.cat-btn').forEach(b => b.classList.remove('active'));
+  if (cat) {
+    event.target.classList.add('active');
   } else {
-    document.getElementById('chat-api-setup').style.display = 'block';
-    document.getElementById('chat-input-area').style.display = 'none';
+    document.querySelectorAll('.cat-btn')[5].classList.add('active'); // "Ver todas"
   }
+  displayResults(faqData);
 }
 
-function saveApiKey() {
-  const val = document.getElementById('api-key-input').value.trim();
-  if (!val.startsWith('sk-ant-')) {
-    alert('Por favor ingresa una API Key válida de Anthropic (debe comenzar con sk-ant-)');
+function searchFAQs() {
+  const query = document.getElementById('chat-search').value.trim().toLowerCase();
+  if (query.length < 2) {
+    document.getElementById('chat-results').style.display = 'none';
+    document.getElementById('chat-categories').style.display = 'grid';
     return;
   }
-  apiKey = val;
-  localStorage.setItem('jelou_claude_key', apiKey);
-  document.getElementById('chat-api-setup').style.display = 'none';
-  document.getElementById('chat-input-area').style.display = 'flex';
-  addMessage('bot', '✅ ¡Listo! Ahora puedo responder tus preguntas sobre Jelou.AI. ¿En qué puedo ayudarte?');
-  document.getElementById('chat-input').focus();
+  document.getElementById('chat-categories').style.display = 'none';
+  const matches = faqData.filter(d =>
+    d.q.toLowerCase().includes(query) ||
+    d.a.toLowerCase().includes(query) ||
+    d.section.toLowerCase().includes(query)
+  );
+  displayResults(matches);
 }
 
-function addMessage(role, text) {
-  const msgs = document.getElementById('chat-messages');
-  const div = document.createElement('div');
-  div.className = `msg ${role}`;
-  div.innerHTML = `<div class="bubble">${text}</div>`;
-  msgs.appendChild(div);
-  msgs.scrollTop = msgs.scrollHeight;
-  return div;
-}
+function displayResults(items) {
+  const filtered = currentCategory ? items.filter(i => i.section.startsWith(currentCategory)) : items;
+  const resultsList = document.getElementById('results-list');
+  document.getElementById('chat-results').style.display = 'block';
 
-function addTyping() {
-  const msgs = document.getElementById('chat-messages');
-  const div = document.createElement('div');
-  div.className = 'msg bot';
-  div.id = 'typing-indicator';
-  div.innerHTML = '<div class="bubble"><div class="typing-dots"><span></span><span></span><span></span></div></div>';
-  msgs.appendChild(div);
-  msgs.scrollTop = msgs.scrollHeight;
-}
-
-function removeTyping() {
-  const t = document.getElementById('typing-indicator');
-  if (t) t.remove();
-}
-
-async function sendMessage() {
-  const input = document.getElementById('chat-input');
-  const text = input.value.trim();
-  if (!text || !apiKey) return;
-  input.value = '';
-  input.style.height = 'auto';
-  document.getElementById('chat-send').disabled = true;
-  addMessage('user', text);
-  chatHistory.push({ role: 'user', content: text });
-  addTyping();
-  try {
-    const response = await fetch('https://api.anthropic.com/v1/messages', {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-        'x-api-key': apiKey,
-        'anthropic-version': '2023-06-01',
-        'anthropic-dangerous-direct-browser-access': 'true'
-      },
-      body: JSON.stringify({
-        model: 'claude-haiku-4-5-20251001',
-        max_tokens: 512,
-        system: SYSTEM_PROMPT,
-        messages: chatHistory.slice(-10)
-      })
-    });
-    const data = await response.json();
-    removeTyping();
-    if (data.content && data.content[0]) {
-      const reply = data.content[0].text;
-      chatHistory.push({ role: 'assistant', content: reply });
-      addMessage('bot', reply.replace(/\*\*(.*?)\*\*/g,'<strong>$1</strong>').replace(/\n/g,'<br>'));
-    } else if (data.error) {
-      if (data.error.type === 'authentication_error') {
-        addMessage('bot', '❌ API Key inválida. <a href="#" onclick="resetKey()">Cambiar API Key</a>');
-      } else {
-        addMessage('bot', `❌ Error: ${data.error.message}`);
-      }
-    }
-  } catch (e) {
-    removeTyping();
-    addMessage('bot', '❌ Error de conexión. Verifica tu API Key y conexión a internet.');
+  if (!filtered.length) {
+    resultsList.innerHTML = '<div class="msg bot" style="margin:20px 0"><div class="bubble">No se encontraron resultados. Intenta con otras palabras.</div></div>';
+    return;
   }
-  document.getElementById('chat-send').disabled = false;
-  document.getElementById('chat-input').focus();
+
+  resultsList.innerHTML = filtered.map((f, i) => `
+    <div class="faq-result" onclick="showResult('${f.q.replace(/'/g, "\\'")}', '${f.a.replace(/'/g, "\\'")}', '${f.section}')">
+      <div class="faq-result-cat">${f.section}</div>
+      <div class="faq-result-q">${f.q}</div>
+      <div class="faq-result-a">${f.a}</div>
+    </div>
+  `).join('');
 }
 
-function resetKey() {
-  apiKey = '';
-  localStorage.removeItem('jelou_claude_key');
-  document.getElementById('chat-api-setup').style.display = 'block';
-  document.getElementById('chat-input-area').style.display = 'none';
-}
-
-function handleChatKey(e) {
-  if (e.key === 'Enter' && !e.shiftKey) { e.preventDefault(); sendMessage(); }
-}
-
-function autoResize(el) {
-  el.style.height = 'auto';
-  el.style.height = Math.min(el.scrollHeight, 100) + 'px';
-}
-
-// Init
-if (apiKey) {
-  document.getElementById('chat-api-setup').style.display = 'none';
+function showResult(q, a, section) {
+  const msgs = document.getElementById('chat-messages');
+  msgs.innerHTML = '<div class="msg bot"><div class="bubble"><strong>' + section + '</strong><br><br><em>' + q + '</em><br><br>' + a + '</div></div>';
+  msgs.scrollTop = msgs.scrollHeight;
+  document.getElementById('chat-results').style.display = 'none';
+  document.getElementById('chat-categories').style.display = 'grid';
+  document.getElementById('chat-search').value = '';
 }
 </script>
 </body>
