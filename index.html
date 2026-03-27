@@ -1,0 +1,1113 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Jelou Soporte — Documentación y FAQs</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" />
+  <style>
+    :root {
+      --primary: #00C8A0;
+      --primary-dark: #00a882;
+      --primary-light: #e6faf6;
+      --dark: #0f2132;
+      --dark2: #1a3347;
+      --text: #1e293b;
+      --text-muted: #64748b;
+      --border: #e2e8f0;
+      --bg: #f8fafc;
+      --white: #ffffff;
+      --card-shadow: 0 4px 24px rgba(0,200,160,0.08);
+      --radius: 16px;
+    }
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    html { scroll-behavior: smooth; }
+    body { font-family: 'Inter', sans-serif; color: var(--text); background: var(--bg); line-height: 1.6; }
+
+    /* ===== HEADER ===== */
+    header {
+      position: sticky; top: 0; z-index: 100;
+      background: rgba(15,33,50,0.97);
+      backdrop-filter: blur(10px);
+      border-bottom: 1px solid rgba(0,200,160,0.2);
+    }
+    .nav-inner {
+      max-width: 1200px; margin: 0 auto;
+      display: flex; align-items: center; justify-content: space-between;
+      padding: 0 24px; height: 64px;
+    }
+    .logo { display: flex; align-items: center; gap: 10px; text-decoration: none; }
+    .logo-dot { width: 32px; height: 32px; border-radius: 8px; background: linear-gradient(135deg, var(--primary), #00e5c8); display: flex; align-items: center; justify-content: center; }
+    .logo-dot i { color: white; font-size: 14px; }
+    .logo-text { font-size: 18px; font-weight: 700; color: white; }
+    .logo-text span { color: var(--primary); }
+    nav { display: flex; gap: 4px; }
+    nav a {
+      color: rgba(255,255,255,0.7); text-decoration: none; font-size: 14px; font-weight: 500;
+      padding: 8px 14px; border-radius: 8px; transition: all 0.2s;
+    }
+    nav a:hover { color: var(--primary); background: rgba(0,200,160,0.1); }
+    .nav-cta {
+      background: var(--primary); color: var(--dark) !important;
+      padding: 8px 18px !important; border-radius: 8px !important; font-weight: 600 !important;
+    }
+    .nav-cta:hover { background: var(--primary-dark) !important; color: white !important; }
+
+    /* ===== HERO ===== */
+    .hero {
+      background: linear-gradient(135deg, var(--dark) 0%, var(--dark2) 50%, #0a2840 100%);
+      padding: 80px 24px 100px;
+      text-align: center;
+      position: relative;
+      overflow: hidden;
+    }
+    .hero::before {
+      content: '';
+      position: absolute; inset: 0;
+      background: radial-gradient(ellipse 60% 50% at 50% 100%, rgba(0,200,160,0.15), transparent);
+    }
+    .hero-badge {
+      display: inline-flex; align-items: center; gap: 6px;
+      background: rgba(0,200,160,0.15); border: 1px solid rgba(0,200,160,0.3);
+      color: var(--primary); font-size: 13px; font-weight: 500;
+      padding: 6px 14px; border-radius: 100px; margin-bottom: 24px;
+    }
+    .hero h1 {
+      font-size: clamp(32px, 5vw, 56px); font-weight: 800; color: white;
+      line-height: 1.15; margin-bottom: 20px;
+    }
+    .hero h1 span { color: var(--primary); }
+    .hero p {
+      font-size: 18px; color: rgba(255,255,255,0.65); max-width: 560px; margin: 0 auto 40px;
+    }
+    .search-box {
+      max-width: 580px; margin: 0 auto; position: relative; z-index: 1;
+    }
+    .search-box input {
+      width: 100%; padding: 18px 60px 18px 24px;
+      font-size: 16px; border-radius: 14px;
+      border: 2px solid rgba(0,200,160,0.3);
+      background: rgba(255,255,255,0.06);
+      color: white; outline: none;
+      transition: all 0.3s;
+    }
+    .search-box input::placeholder { color: rgba(255,255,255,0.4); }
+    .search-box input:focus { border-color: var(--primary); background: rgba(255,255,255,0.1); }
+    .search-box button {
+      position: absolute; right: 8px; top: 50%; transform: translateY(-50%);
+      background: var(--primary); border: none; color: var(--dark);
+      width: 44px; height: 44px; border-radius: 10px; cursor: pointer;
+      font-size: 18px; display: flex; align-items: center; justify-content: center;
+      transition: background 0.2s;
+    }
+    .search-box button:hover { background: var(--primary-dark); }
+    #search-results {
+      position: absolute; top: calc(100% + 8px); left: 0; right: 0;
+      background: white; border-radius: 14px; box-shadow: 0 20px 60px rgba(0,0,0,0.3);
+      max-height: 380px; overflow-y: auto; display: none; z-index: 200;
+    }
+    .search-result-item {
+      padding: 14px 20px; border-bottom: 1px solid var(--border); cursor: pointer;
+      transition: background 0.15s;
+    }
+    .search-result-item:last-child { border-bottom: none; }
+    .search-result-item:hover { background: var(--primary-light); }
+    .search-result-item .result-section { font-size: 11px; font-weight: 600; color: var(--primary); text-transform: uppercase; letter-spacing: 0.5px; margin-bottom: 4px; }
+    .search-result-item .result-question { font-size: 14px; color: var(--text); font-weight: 500; }
+    .search-result-item .result-answer { font-size: 13px; color: var(--text-muted); margin-top: 2px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+
+    /* ===== STATS ===== */
+    .stats {
+      background: white; border-bottom: 1px solid var(--border);
+      padding: 20px 24px;
+    }
+    .stats-inner {
+      max-width: 1200px; margin: 0 auto;
+      display: flex; justify-content: center; gap: 48px; flex-wrap: wrap;
+    }
+    .stat-item { text-align: center; }
+    .stat-num { font-size: 26px; font-weight: 800; color: var(--primary); }
+    .stat-label { font-size: 13px; color: var(--text-muted); font-weight: 500; }
+
+    /* ===== MAIN CONTENT ===== */
+    main { max-width: 1200px; margin: 0 auto; padding: 60px 24px 100px; }
+
+    /* ===== SECTION TITLE ===== */
+    .section-header { text-align: center; margin-bottom: 40px; }
+    .section-label {
+      display: inline-flex; align-items: center; gap: 6px;
+      color: var(--primary); font-size: 13px; font-weight: 600; letter-spacing: 0.5px;
+      text-transform: uppercase; margin-bottom: 10px;
+    }
+    .section-header h2 { font-size: 32px; font-weight: 800; color: var(--dark); margin-bottom: 10px; }
+    .section-header p { font-size: 16px; color: var(--text-muted); max-width: 500px; margin: 0 auto; }
+
+    /* ===== MODULE CARDS ===== */
+    .modules-grid {
+      display: grid; grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+      gap: 24px; margin-bottom: 80px;
+    }
+    .module-card {
+      background: white; border-radius: var(--radius); border: 1px solid var(--border);
+      padding: 32px; cursor: pointer; transition: all 0.3s; text-decoration: none; display: block;
+      box-shadow: var(--card-shadow);
+    }
+    .module-card:hover { transform: translateY(-4px); box-shadow: 0 12px 40px rgba(0,200,160,0.15); border-color: var(--primary); }
+    .card-icon {
+      width: 56px; height: 56px; border-radius: 14px; margin-bottom: 20px;
+      display: flex; align-items: center; justify-content: center; font-size: 24px;
+    }
+    .card-icon.connect { background: linear-gradient(135deg, #667eea, #764ba2); }
+    .card-icon.brain { background: linear-gradient(135deg, #00C8A0, #00a882); }
+    .card-icon.marketplace { background: linear-gradient(135deg, #f093fb, #f5576c); }
+    .card-icon.datum { background: linear-gradient(135deg, #4facfe, #00f2fe); }
+    .card-icon.logs { background: linear-gradient(135deg, #43e97b, #38f9d7); }
+    .module-card h3 { font-size: 20px; font-weight: 700; color: var(--dark); margin-bottom: 10px; }
+    .module-card p { font-size: 14px; color: var(--text-muted); line-height: 1.6; margin-bottom: 20px; }
+    .card-tags { display: flex; flex-wrap: wrap; gap: 8px; margin-bottom: 20px; }
+    .tag {
+      background: var(--primary-light); color: var(--primary-dark);
+      font-size: 12px; font-weight: 600; padding: 4px 10px; border-radius: 100px;
+    }
+    .card-arrow { display: flex; align-items: center; gap: 6px; color: var(--primary); font-size: 14px; font-weight: 600; }
+
+    /* ===== DOC SECTIONS ===== */
+    .doc-section { margin-bottom: 60px; }
+    .doc-section-header {
+      display: flex; align-items: center; gap: 14px;
+      padding: 24px 28px; background: white; border-radius: var(--radius) var(--radius) 0 0;
+      border: 1px solid var(--border); border-bottom: none;
+    }
+    .doc-section-icon {
+      width: 44px; height: 44px; border-radius: 10px;
+      display: flex; align-items: center; justify-content: center; font-size: 20px; flex-shrink: 0;
+    }
+    .doc-section-header h3 { font-size: 20px; font-weight: 700; color: var(--dark); }
+    .doc-section-header p { font-size: 14px; color: var(--text-muted); margin-top: 2px; }
+    .doc-section-url { font-size: 12px; color: var(--primary); font-family: monospace; margin-top: 4px; }
+    .doc-section-body { border: 1px solid var(--border); border-radius: 0 0 var(--radius) var(--radius); overflow: hidden; }
+
+    /* ===== TABS ===== */
+    .tabs { display: flex; background: #f1f5f9; border-bottom: 1px solid var(--border); }
+    .tab-btn {
+      padding: 12px 20px; font-size: 14px; font-weight: 500; color: var(--text-muted);
+      border: none; background: none; cursor: pointer; transition: all 0.2s;
+      border-bottom: 2px solid transparent; margin-bottom: -1px;
+    }
+    .tab-btn.active { color: var(--primary); border-bottom-color: var(--primary); background: white; }
+    .tab-btn:hover:not(.active) { color: var(--text); background: rgba(0,200,160,0.05); }
+    .tab-content { padding: 28px; background: white; display: none; }
+    .tab-content.active { display: block; }
+
+    /* ===== INFO GRID ===== */
+    .info-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 16px; margin-bottom: 24px; }
+    .info-item { background: var(--bg); border-radius: 10px; padding: 16px; border: 1px solid var(--border); }
+    .info-item .info-label { font-size: 11px; font-weight: 700; color: var(--text-muted); text-transform: uppercase; letter-spacing: 0.5px; margin-bottom: 6px; }
+    .info-item .info-value { font-size: 15px; font-weight: 600; color: var(--dark); }
+
+    /* ===== TABLE ===== */
+    .doc-table { width: 100%; border-collapse: collapse; font-size: 14px; margin: 16px 0; }
+    .doc-table th { background: var(--bg); padding: 10px 14px; text-align: left; font-weight: 600; color: var(--text-muted); font-size: 12px; text-transform: uppercase; letter-spacing: 0.5px; border-bottom: 2px solid var(--border); }
+    .doc-table td { padding: 12px 14px; border-bottom: 1px solid var(--border); }
+    .doc-table tr:last-child td { border-bottom: none; }
+    .doc-table tr:hover td { background: var(--bg); }
+    code { background: var(--bg); border: 1px solid var(--border); padding: 2px 7px; border-radius: 5px; font-size: 13px; font-family: monospace; color: var(--primary-dark); }
+
+    /* ===== STEPS ===== */
+    .steps { counter-reset: step; }
+    .step { display: flex; gap: 16px; margin-bottom: 20px; align-items: flex-start; }
+    .step-num {
+      counter-increment: step; flex-shrink: 0;
+      width: 32px; height: 32px; background: var(--primary); border-radius: 50%;
+      display: flex; align-items: center; justify-content: center;
+      font-size: 14px; font-weight: 700; color: white;
+    }
+    .step-num::before { content: counter(step); }
+    .step-content { flex: 1; padding-top: 4px; }
+    .step-content strong { display: block; font-size: 15px; color: var(--dark); margin-bottom: 4px; }
+    .step-content p { font-size: 14px; color: var(--text-muted); }
+
+    /* ===== FAQ ACCORDION ===== */
+    .faq-list { list-style: none; }
+    .faq-item { border-bottom: 1px solid var(--border); }
+    .faq-item:last-child { border-bottom: none; }
+    .faq-question {
+      width: 100%; text-align: left; background: none; border: none; cursor: pointer;
+      padding: 18px 0; display: flex; justify-content: space-between; align-items: center;
+      font-size: 15px; font-weight: 500; color: var(--dark); gap: 16px;
+    }
+    .faq-question:hover { color: var(--primary); }
+    .faq-icon { flex-shrink: 0; width: 24px; height: 24px; border-radius: 50%; background: var(--bg); display: flex; align-items: center; justify-content: center; color: var(--text-muted); transition: all 0.3s; }
+    .faq-item.open .faq-icon { background: var(--primary); color: white; transform: rotate(45deg); }
+    .faq-answer { font-size: 14px; color: var(--text-muted); line-height: 1.7; padding-bottom: 18px; display: none; }
+    .faq-item.open .faq-answer { display: block; }
+    .faq-answer strong { color: var(--dark); }
+
+    /* ===== BADGE ===== */
+    .badge {
+      display: inline-flex; align-items: center; gap: 4px;
+      padding: 3px 10px; border-radius: 100px; font-size: 12px; font-weight: 600;
+    }
+    .badge-green { background: #d1fae5; color: #065f46; }
+    .badge-blue { background: #dbeafe; color: #1e40af; }
+    .badge-yellow { background: #fef9c3; color: #854d0e; }
+    .badge-red { background: #fee2e2; color: #991b1b; }
+
+    /* ===== GLOSSARY ===== */
+    .glossary-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 16px; }
+    .glossary-item { background: white; border: 1px solid var(--border); border-radius: 12px; padding: 18px; }
+    .glossary-term { font-size: 15px; font-weight: 700; color: var(--dark); margin-bottom: 6px; }
+    .glossary-def { font-size: 13px; color: var(--text-muted); line-height: 1.6; }
+
+    /* ===== CONTACT SECTION ===== */
+    .contact-section { background: linear-gradient(135deg, var(--dark) 0%, var(--dark2) 100%); border-radius: var(--radius); padding: 56px 40px; text-align: center; margin-bottom: 60px; }
+    .contact-section h2 { font-size: 28px; font-weight: 800; color: white; margin-bottom: 10px; }
+    .contact-section p { font-size: 16px; color: rgba(255,255,255,0.6); margin-bottom: 32px; }
+    .contact-cards { display: flex; justify-content: center; gap: 16px; flex-wrap: wrap; }
+    .contact-card { background: rgba(255,255,255,0.07); border: 1px solid rgba(255,255,255,0.1); border-radius: 12px; padding: 20px 28px; color: white; text-decoration: none; display: flex; align-items: center; gap: 12px; transition: all 0.2s; min-width: 180px; }
+    .contact-card:hover { background: rgba(0,200,160,0.2); border-color: var(--primary); }
+    .contact-card i { font-size: 20px; color: var(--primary); }
+    .contact-card span { font-size: 14px; font-weight: 500; }
+
+    /* ===== FOOTER ===== */
+    footer { background: var(--dark); padding: 32px 24px; text-align: center; }
+    .footer-inner { max-width: 1200px; margin: 0 auto; }
+    .footer-logo { display: inline-flex; align-items: center; gap: 8px; margin-bottom: 12px; }
+    .footer-logo span { color: white; font-size: 16px; font-weight: 700; }
+    footer p { color: rgba(255,255,255,0.4); font-size: 13px; }
+    footer p a { color: var(--primary); text-decoration: none; }
+
+    /* ===== CHATBOT ===== */
+    #chat-btn {
+      position: fixed; bottom: 28px; right: 28px; z-index: 1000;
+      width: 60px; height: 60px; border-radius: 50%; border: none; cursor: pointer;
+      background: linear-gradient(135deg, var(--primary), #00e5c8);
+      box-shadow: 0 8px 32px rgba(0,200,160,0.4);
+      display: flex; align-items: center; justify-content: center;
+      transition: all 0.3s; font-size: 22px; color: var(--dark);
+      animation: pulse-chat 2s infinite;
+    }
+    @keyframes pulse-chat {
+      0%, 100% { box-shadow: 0 8px 32px rgba(0,200,160,0.4); }
+      50% { box-shadow: 0 8px 40px rgba(0,200,160,0.7); }
+    }
+    #chat-btn:hover { transform: scale(1.1); animation: none; }
+    #chat-btn .chat-label {
+      position: absolute; right: 70px; top: 50%; transform: translateY(-50%);
+      background: var(--dark); color: white; padding: 6px 12px; border-radius: 8px;
+      font-size: 13px; font-weight: 500; white-space: nowrap;
+      pointer-events: none;
+    }
+    #chat-panel {
+      position: fixed; bottom: 100px; right: 28px; z-index: 999;
+      width: 380px; max-height: 560px; border-radius: 20px; overflow: hidden;
+      background: white; box-shadow: 0 24px 80px rgba(0,0,0,0.2);
+      display: none; flex-direction: column;
+      border: 1px solid rgba(0,200,160,0.2);
+    }
+    #chat-panel.open { display: flex; }
+    .chat-header {
+      background: linear-gradient(135deg, var(--dark), var(--dark2));
+      padding: 18px 20px; display: flex; align-items: center; gap: 12px;
+    }
+    .chat-avatar {
+      width: 40px; height: 40px; border-radius: 50%;
+      background: linear-gradient(135deg, var(--primary), #00e5c8);
+      display: flex; align-items: center; justify-content: center; font-size: 18px;
+    }
+    .chat-header-info h4 { color: white; font-size: 15px; font-weight: 700; }
+    .chat-header-info p { color: rgba(255,255,255,0.6); font-size: 12px; }
+    .online-dot { width: 8px; height: 8px; background: #22c55e; border-radius: 50%; display: inline-block; margin-right: 4px; }
+    .chat-close { margin-left: auto; background: none; border: none; color: rgba(255,255,255,0.5); cursor: pointer; font-size: 18px; padding: 4px; }
+    .chat-close:hover { color: white; }
+    #chat-messages { flex: 1; overflow-y: auto; padding: 20px; display: flex; flex-direction: column; gap: 12px; min-height: 200px; max-height: 340px; }
+    .msg { max-width: 85%; }
+    .msg.bot .bubble { background: var(--bg); border-radius: 4px 16px 16px 16px; border: 1px solid var(--border); }
+    .msg.user { align-self: flex-end; }
+    .msg.user .bubble { background: linear-gradient(135deg, var(--primary), var(--primary-dark)); color: white; border-radius: 16px 4px 16px 16px; }
+    .bubble { padding: 12px 16px; font-size: 14px; line-height: 1.5; }
+    .bubble a { color: var(--primary); }
+    .typing-dots { display: flex; gap: 4px; padding: 14px 16px; align-items: center; }
+    .typing-dots span { width: 7px; height: 7px; background: var(--text-muted); border-radius: 50%; animation: typing 1.2s infinite; }
+    .typing-dots span:nth-child(2) { animation-delay: 0.2s; }
+    .typing-dots span:nth-child(3) { animation-delay: 0.4s; }
+    @keyframes typing { 0%, 60%, 100% { transform: translateY(0); opacity: 0.5; } 30% { transform: translateY(-6px); opacity: 1; } }
+    #chat-api-setup { padding: 20px; background: var(--primary-light); border-top: 1px solid rgba(0,200,160,0.2); display: none; }
+    #chat-api-setup p { font-size: 13px; color: var(--text-muted); margin-bottom: 10px; }
+    #chat-api-setup a { color: var(--primary); }
+    #api-key-input { width: 100%; padding: 10px 14px; border: 1.5px solid var(--border); border-radius: 10px; font-size: 13px; margin-bottom: 8px; outline: none; font-family: monospace; }
+    #api-key-input:focus { border-color: var(--primary); }
+    #api-key-btn { width: 100%; background: var(--primary); color: var(--dark); border: none; padding: 10px; border-radius: 10px; font-size: 14px; font-weight: 600; cursor: pointer; }
+    #api-key-btn:hover { background: var(--primary-dark); }
+    .chat-input-area { display: flex; gap: 8px; padding: 14px; border-top: 1px solid var(--border); }
+    #chat-input { flex: 1; padding: 10px 14px; border: 1.5px solid var(--border); border-radius: 10px; font-size: 14px; outline: none; font-family: inherit; resize: none; }
+    #chat-input:focus { border-color: var(--primary); }
+    #chat-send { background: var(--primary); color: var(--dark); border: none; width: 40px; height: 40px; border-radius: 10px; cursor: pointer; font-size: 16px; display: flex; align-items: center; justify-content: center; flex-shrink: 0; }
+    #chat-send:hover { background: var(--primary-dark); }
+    #chat-send:disabled { background: var(--border); cursor: not-allowed; }
+
+    /* ===== RESPONSIVE ===== */
+    @media (max-width: 768px) {
+      nav { display: none; }
+      .hero h1 { font-size: 28px; }
+      .stats-inner { gap: 24px; }
+      #chat-panel { width: calc(100vw - 32px); right: 16px; }
+      .modules-grid { grid-template-columns: 1fr; }
+      .contact-section { padding: 36px 20px; }
+      .section-header h2 { font-size: 24px; }
+    }
+  </style>
+</head>
+<body>
+
+<!-- ===== HEADER ===== -->
+<header>
+  <div class="nav-inner">
+    <a href="#" class="logo">
+      <div class="logo-dot"><i class="fas fa-bolt"></i></div>
+      <div class="logo-text"><span>Jelou</span> Soporte</div>
+    </a>
+    <nav>
+      <a href="#connect">Connect</a>
+      <a href="#brain">Brain Studio</a>
+      <a href="#marketplace">Marketplace</a>
+      <a href="#glosario">Glosario</a>
+      <a href="https://docs.jelou.ai" target="_blank" class="nav-cta"><i class="fas fa-arrow-up-right-from-square" style="font-size:11px;margin-right:4px"></i>Docs Oficiales</a>
+    </nav>
+  </div>
+</header>
+
+<!-- ===== HERO ===== -->
+<section class="hero">
+  <div class="hero-badge"><i class="fas fa-circle-check"></i> Documentación actualizada · 26/03/2026</div>
+  <h1>Centro de Soporte<br><span>Jelou.AI</span></h1>
+  <p>Encuentra respuestas, guías paso a paso y documentación técnica de Connect y Brain Studio en un solo lugar.</p>
+  <div class="search-box">
+    <input type="text" id="search-input" placeholder="Buscar en la documentación… (ej: campaña, nodo API, datum)" autocomplete="off" />
+    <button onclick="doSearch()"><i class="fas fa-magnifying-glass"></i></button>
+    <div id="search-results"></div>
+  </div>
+</section>
+
+<!-- ===== STATS ===== -->
+<div class="stats">
+  <div class="stats-inner">
+    <div class="stat-item"><div class="stat-num">10</div><div class="stat-label">Módulos documentados</div></div>
+    <div class="stat-item"><div class="stat-num">170+</div><div class="stat-label">FAQs resueltas</div></div>
+    <div class="stat-item"><div class="stat-num">15</div><div class="stat-label">Guías paso a paso</div></div>
+    <div class="stat-item"><div class="stat-num">19+</div><div class="stat-label">Integraciones Marketplace</div></div>
+  </div>
+</div>
+
+<!-- ===== MAIN ===== -->
+<main>
+
+  <!-- MODULE CARDS -->
+  <div class="section-header" style="margin-top:0">
+    <div class="section-label"><i class="fas fa-grid-2"></i> Explorar por módulo</div>
+    <h2>¿Qué necesitas hoy?</h2>
+    <p>Selecciona un módulo para acceder a documentación, FAQs y guías paso a paso.</p>
+  </div>
+
+  <div class="modules-grid">
+    <a href="#connect" class="module-card">
+      <div class="card-icon connect"><i class="fas fa-comments" style="color:white"></i></div>
+      <h3>Connect</h3>
+      <p>Gestión de conversaciones, campañas masivas, monitoreo en tiempo real y catálogo de productos.</p>
+      <div class="card-tags">
+        <span class="tag">Panel Multiagente</span>
+        <span class="tag">Campañas</span>
+        <span class="tag">Monitoreo</span>
+        <span class="tag">Clientes</span>
+        <span class="tag">Shop</span>
+      </div>
+      <div class="card-arrow"><i class="fas fa-arrow-right"></i> Ver documentación</div>
+    </a>
+    <a href="#brain" class="module-card">
+      <div class="card-icon brain"><i class="fas fa-brain" style="color:white"></i></div>
+      <h3>Brain Studio</h3>
+      <p>Plataforma visual para construir agentes de IA y flujos automatizados sin necesidad de código.</p>
+      <div class="card-tags">
+        <span class="tag">Proyectos</span>
+        <span class="tag">10 Nodos</span>
+        <span class="tag">Skills</span>
+        <span class="tag">Tools</span>
+        <span class="tag">Logs</span>
+      </div>
+      <div class="card-arrow"><i class="fas fa-arrow-right"></i> Ver documentación</div>
+    </a>
+    <a href="#datum" class="module-card">
+      <div class="card-icon datum"><i class="fas fa-database" style="color:white"></i></div>
+      <h3>Datum & Datum V2</h3>
+      <p>Gestión de bases de datos estructuradas con API REST nativa, triggers, monitoring e integración MCP con Claude y ChatGPT.</p>
+      <div class="card-tags">
+        <span class="tag">API REST</span>
+        <span class="tag">MCP Claude</span>
+        <span class="tag">Triggers</span>
+        <span class="tag">Monitor</span>
+      </div>
+      <div class="card-arrow"><i class="fas fa-arrow-right"></i> Ver documentación</div>
+    </a>
+    <a href="#marketplace" class="module-card">
+      <div class="card-icon marketplace"><i class="fas fa-store" style="color:white"></i></div>
+      <h3>Marketplace</h3>
+      <p>19+ integraciones con CRMs, ecommerce, facturación electrónica y firma digital. Templates de Skills y Tools listos para usar.</p>
+      <div class="card-tags">
+        <span class="tag">Shopify</span>
+        <span class="tag">Stripe</span>
+        <span class="tag">Bitrix24</span>
+        <span class="tag">15 Templates</span>
+      </div>
+      <div class="card-arrow"><i class="fas fa-arrow-right"></i> Ver catálogo</div>
+    </a>
+    <a href="#logs-debugger" class="module-card">
+      <div class="card-icon logs"><i class="fas fa-bug" style="color:white"></i></div>
+      <h3>Logs & Debugger</h3>
+      <p>Inspecciona ejecuciones de Skills y Tools. Revisa conversaciones reales para diagnóstico de problemas.</p>
+      <div class="card-tags">
+        <span class="tag">Ejecuciones</span>
+        <span class="tag">Traza</span>
+        <span class="tag">Conversaciones</span>
+      </div>
+      <div class="card-arrow"><i class="fas fa-arrow-right"></i> Ver documentación</div>
+    </a>
+    <a href="#faqs-connect" class="module-card">
+      <div class="card-icon" style="background:linear-gradient(135deg,#fbbf24,#f59e0b)"><i class="fas fa-circle-question" style="color:white"></i></div>
+      <h3>FAQs &amp; Guías</h3>
+      <p>170+ preguntas frecuentes organizadas por módulo y 15 guías paso a paso para tareas comunes.</p>
+      <div class="card-tags">
+        <span class="tag">60+ Connect</span>
+        <span class="tag">110+ Brain</span>
+        <span class="tag">15 Guías</span>
+      </div>
+      <div class="card-arrow"><i class="fas fa-arrow-right"></i> Ver FAQs</div>
+    </a>
+  </div>
+
+  <!-- ==================== CONNECT ==================== -->
+  <div id="connect" class="doc-section">
+    <div class="doc-section-header">
+      <div class="doc-section-icon" style="background:linear-gradient(135deg,#667eea,#764ba2)"><i class="fas fa-comments" style="color:white"></i></div>
+      <div>
+        <h3>Connect</h3>
+        <p>Gestión centralizada de conversaciones, campañas y clientes</p>
+        <div class="doc-section-url">https://apps.jelou.ai/pma/chats</div>
+      </div>
+    </div>
+    <div class="doc-section-body">
+      <div class="tabs">
+        <button class="tab-btn active" onclick="switchTab(this,'connect-overview')">Visión General</button>
+        <button class="tab-btn" onclick="switchTab(this,'connect-modules')">Módulos</button>
+        <button class="tab-btn" onclick="switchTab(this,'connect-faqs')">FAQs</button>
+        <button class="tab-btn" onclick="switchTab(this,'connect-guides')">Guías</button>
+      </div>
+      <div id="connect-overview" class="tab-content active">
+        <p style="margin-bottom:20px;color:var(--text-muted)"><strong>Connect</strong> es el módulo central de Jelou.AI para gestionar todas las interacciones con clientes. Incluye chats en tiempo real, campañas masivas, monitoreo de equipos, gestión de contactos y catálogo de productos.</p>
+        <div class="info-grid">
+          <div class="info-item"><div class="info-label">Módulos</div><div class="info-value">5 principales</div></div>
+          <div class="info-item"><div class="info-label">FAQs disponibles</div><div class="info-value">60+</div></div>
+          <div class="info-item"><div class="info-label">Guías paso a paso</div><div class="info-value">8 tareas</div></div>
+          <div class="info-item"><div class="info-label">URL base</div><div class="info-value"><code>/pma/chats</code></div></div>
+        </div>
+        <table class="doc-table">
+          <thead><tr><th>Módulo</th><th>URL</th><th>Función principal</th></tr></thead>
+          <tbody>
+            <tr><td><strong>Panel Multiagente</strong></td><td><code>/pma/chats</code></td><td>Gestión de conversaciones en tiempo real</td></tr>
+            <tr><td><strong>Campañas</strong></td><td><code>/hsm/campaigns</code></td><td>Envío de mensajes masivos</td></tr>
+            <tr><td><strong>Monitoreo</strong></td><td><code>/monitoring/live/chats</code></td><td>Supervisión en tiempo real</td></tr>
+            <tr><td><strong>Clientes</strong></td><td><code>/clients/conversation</code></td><td>Base de datos de contactos</td></tr>
+            <tr><td><strong>Shop</strong></td><td><code>/shop/products</code></td><td>Catálogo de productos</td></tr>
+          </tbody>
+        </table>
+      </div>
+      <div id="connect-modules" class="tab-content">
+        <h4 style="font-size:16px;font-weight:700;margin-bottom:16px;color:var(--dark)">📊 Monitoreo — Métricas en Tiempo Real</h4>
+        <table class="doc-table" style="margin-bottom:28px">
+          <thead><tr><th>Métrica</th><th>Bueno</th><th>Aceptable</th><th>Necesita Mejora</th></tr></thead>
+          <tbody>
+            <tr><td>Primera Respuesta</td><td><span class="badge badge-green">< 1 min</span></td><td><span class="badge badge-yellow">1-3 min</span></td><td><span class="badge badge-red">> 5 min</span></td></tr>
+            <tr><td>Promedio Respuesta</td><td><span class="badge badge-green">< 1 min</span></td><td><span class="badge badge-yellow">1-2 min</span></td><td><span class="badge badge-red">> 3 min</span></td></tr>
+            <tr><td>Chats Atendidos</td><td><span class="badge badge-green">> 80%</span></td><td><span class="badge badge-yellow">60-80%</span></td><td><span class="badge badge-red">< 60%</span></td></tr>
+          </tbody>
+        </table>
+        <h4 style="font-size:16px;font-weight:700;margin-bottom:16px;color:var(--dark)">🛍️ Shop — Campos del Producto</h4>
+        <table class="doc-table">
+          <thead><tr><th>Campo</th><th>Obligatorio</th><th>Notas</th></tr></thead>
+          <tbody>
+            <tr><td>Nombre</td><td><span class="badge badge-red">Sí</span></td><td>Visible en catálogo</td></tr>
+            <tr><td>SKU</td><td><span class="badge badge-red">Sí</span></td><td>Código único. Ej: BOT-001</td></tr>
+            <tr><td>Precio</td><td><span class="badge badge-red">Sí</span></td><td>Moneda según configuración</td></tr>
+            <tr><td>Descripción</td><td><span class="badge badge-yellow">Recomendado</span></td><td>Ayuda al cliente a decidir</td></tr>
+            <tr><td>Stock</td><td><span class="badge badge-yellow">Recomendado</span></td><td>Cantidad disponible</td></tr>
+            <tr><td>Imagen</td><td><span class="badge badge-blue">Opcional</span></td><td>JPG/PNG, máx. 5MB</td></tr>
+          </tbody>
+        </table>
+      </div>
+      <div id="connect-faqs" class="tab-content">
+        <ul class="faq-list">
+          <li class="faq-item"><button class="faq-question">¿Qué es Connect? <span class="faq-icon"><i class="fas fa-plus"></i></span></button><div class="faq-answer">Connect es el módulo central de Jelou.AI para gestionar todas las interacciones con clientes. Incluye chats en tiempo real, campañas masivas, monitoreo de equipos, gestión de clientes y catálogo de productos.</div></li>
+          <li class="faq-item"><button class="faq-question">¿Cuál es la diferencia entre "Todos" y "No Gestionados"? <span class="faq-icon"><i class="fas fa-plus"></i></span></button><div class="faq-answer"><strong>"Todos"</strong> muestra todas las conversaciones del equipo. <strong>"No Gestionados"</strong> muestra solo los chats que aún no han sido respondidos.</div></li>
+          <li class="faq-item"><button class="faq-question">¿Puedo programar una campaña para una hora específica? <span class="faq-icon"><i class="fas fa-plus"></i></span></button><div class="faq-answer">Sí. Durante la creación de la campaña hay una opción para programar con fecha y hora específica.</div></li>
+          <li class="faq-item"><button class="faq-question">¿Puedo editar una campaña después de enviarla? <span class="faq-icon"><i class="fas fa-plus"></i></span></button><div class="faq-answer">No. Una campaña enviada no se puede editar. Solo puedes crear una nueva o ver el reporte histórico.</div></li>
+          <li class="faq-item"><button class="faq-question">¿Cada cuánto se actualizan las métricas de Monitoreo? <span class="faq-icon"><i class="fas fa-plus"></i></span></button><div class="faq-answer">En tiempo real. Los números se actualizan conforme hay nuevas conversaciones y respuestas.</div></li>
+          <li class="faq-item"><button class="faq-question">¿Cómo reasigno una conversación a otro agente? <span class="faq-icon"><i class="fas fa-plus"></i></span></button><div class="faq-answer">Abre la conversación, busca la opción "Reasignar" o "Transferir", selecciona el agente destino y confirma.</div></li>
+          <li class="faq-item"><button class="faq-question">¿Qué pasa si se agota el stock de un producto en Shop? <span class="faq-icon"><i class="fas fa-plus"></i></span></button><div class="faq-answer">El producto puede mostrarse como "Agotado" o no estar disponible para compra, dependiendo de tu configuración.</div></li>
+          <li class="faq-item"><button class="faq-question">Las métricas de monitoreo no actualizan, ¿qué hago? <span class="faq-icon"><i class="fas fa-plus"></i></span></button><div class="faq-answer">1) Actualiza la página (F5). 2) Cierra y reabre el navegador. 3) Limpia caché. 4) Intenta en otro navegador. 5) Si sigue igual, contacta soporte en support@jelou.ai.</div></li>
+        </ul>
+      </div>
+      <div id="connect-guides" class="tab-content">
+        <h4 style="font-size:16px;font-weight:700;color:var(--dark);margin-bottom:20px">Crear y Enviar una Campaña Masiva</h4>
+        <div class="steps">
+          <div class="step"><div class="step-num"></div><div class="step-content"><strong>Ve al módulo Campañas</strong><p>En el menú izquierdo haz clic en "Campañas".</p></div></div>
+          <div class="step"><div class="step-num"></div><div class="step-content"><strong>Clic en "+ Enviar campaña"</strong><p>Se abre el formulario de creación.</p></div></div>
+          <div class="step"><div class="step-num"></div><div class="step-content"><strong>Completa la información básica</strong><p>Nombre, bot/equipo y canal de envío.</p></div></div>
+          <div class="step"><div class="step-num"></div><div class="step-content"><strong>Selecciona o crea la plantilla</strong><p>Usa variables como {{nombre}}, {{código_descuento}} para personalizar.</p></div></div>
+          <div class="step"><div class="step-num"></div><div class="step-content"><strong>Selecciona destinatarios</strong><p>Individuales, segmentos o filtros por criterios.</p></div></div>
+          <div class="step"><div class="step-num"></div><div class="step-content"><strong>Configura fecha/hora</strong><p>Envío inmediato o programado.</p></div></div>
+          <div class="step"><div class="step-num"></div><div class="step-content"><strong>Revisa y confirma</strong><p>Verifica ortografía, destinatarios y variables antes de enviar.</p></div></div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ==================== BRAIN STUDIO ==================== -->
+  <div id="brain" class="doc-section">
+    <div class="doc-section-header">
+      <div class="doc-section-icon" style="background:linear-gradient(135deg,#00C8A0,#00a882)"><i class="fas fa-brain" style="color:white"></i></div>
+      <div>
+        <h3>Brain Studio</h3>
+        <p>Plataforma visual de agentes de IA y flujos automatizados</p>
+        <div class="doc-section-url">https://apps.jelou.ai/brain</div>
+      </div>
+    </div>
+    <div class="doc-section-body">
+      <div class="tabs">
+        <button class="tab-btn active" onclick="switchTab(this,'brain-overview')">Visión General</button>
+        <button class="tab-btn" onclick="switchTab(this,'brain-nodes')">Nodos</button>
+        <button class="tab-btn" onclick="switchTab(this,'brain-faqs')">FAQs</button>
+        <button class="tab-btn" onclick="switchTab(this,'brain-guides')">Guías</button>
+      </div>
+      <div id="brain-overview" class="tab-content active">
+        <p style="margin-bottom:20px;color:var(--text-muted)"><strong>Brain Studio</strong> es la plataforma visual para construir agentes de IA y flujos automatizados sin necesidad de programar. Usa una interfaz drag-and-drop con nodos predefinidos.</p>
+        <table class="doc-table" style="margin-bottom:24px">
+          <thead><tr><th>Concepto</th><th>Descripción</th></tr></thead>
+          <tbody>
+            <tr><td><strong>Agente</strong></td><td>Entidad de IA que entiende y responde con lógica</td></tr>
+            <tr><td><strong>Nodo</strong></td><td>Componente individual con funcionalidad específica</td></tr>
+            <tr><td><strong>Skill</strong></td><td>Módulo reutilizable con capacidades específicas</td></tr>
+            <tr><td><strong>Tool</strong></td><td>Integración externa (API, servicio en la nube)</td></tr>
+            <tr><td><strong>Canvas</strong></td><td>Área visual donde se construyen los flujos</td></tr>
+            <tr><td><strong>Variable</strong></td><td>Dato que fluye entre nodos</td></tr>
+          </tbody>
+        </table>
+        <div class="info-grid">
+          <div class="info-item"><div class="info-label">Tipos de nodo</div><div class="info-value">10 nodos</div></div>
+          <div class="info-item"><div class="info-label">FAQs disponibles</div><div class="info-value">110+</div></div>
+          <div class="info-item"><div class="info-label">Guías disponibles</div><div class="info-value">7 guías</div></div>
+          <div class="info-item"><div class="info-label">Proyectos activos</div><div class="info-value">Hasta 60+</div></div>
+        </div>
+      </div>
+      <div id="brain-nodes" class="tab-content">
+        <table class="doc-table">
+          <thead><tr><th>Nodo</th><th>Función</th><th>Casos de uso</th></tr></thead>
+          <tbody>
+            <tr><td><strong>AI Agent</strong></td><td>Lógica de inteligencia artificial</td><td>Comprensión de lenguaje, generación de respuestas</td></tr>
+            <tr><td><strong>Message</strong></td><td>Enviar mensajes a canales</td><td>WhatsApp, Email, SMS, Web Chat</td></tr>
+            <tr><td><strong>API</strong></td><td>Llamadas a servicios externos</td><td>GET/POST/PUT/DELETE con auth</td></tr>
+            <tr><td><strong>Code</strong></td><td>JavaScript/TypeScript personalizado</td><td>Lógica compleja, transformación de datos</td></tr>
+            <tr><td><strong>Logic</strong></td><td>Condicionales IF/ELSE</td><td>Ramificaciones, decisiones</td></tr>
+            <tr><td><strong>Datum</strong></td><td>Interacción con bases de datos</td><td>CRUD, consultas SQL</td></tr>
+            <tr><td><strong>Notes</strong></td><td>Documentación inline</td><td>Comentarios, notas del equipo</td></tr>
+            <tr><td><strong>Human Attention</strong></td><td>Escalar a agente humano</td><td>Casos complejos, VIP</td></tr>
+            <tr><td><strong>Skills</strong></td><td>Módulos reutilizables</td><td>Validación email, cálculos, etc.</td></tr>
+            <tr><td><strong>Tools</strong></td><td>Integraciones externas</td><td>Google Sheets, Stripe, Salesforce</td></tr>
+          </tbody>
+        </table>
+      </div>
+      <div id="brain-faqs" class="tab-content">
+        <ul class="faq-list">
+          <li class="faq-item"><button class="faq-question">¿Necesito saber programar para usar Brain Studio? <span class="faq-icon"><i class="fas fa-plus"></i></span></button><div class="faq-answer">No. La mayoría de funcionalidades se hacen visualmente. Los nodos Code permiten JavaScript personalizado para lógica avanzada.</div></li>
+          <li class="faq-item"><button class="faq-question">¿Cuál es la diferencia entre "Probar" y "Publicar"? <span class="faq-icon"><i class="fas fa-plus"></i></span></button><div class="faq-answer"><strong>Probar</strong> abre un simulador para verificar el flujo sin afectar producción. <strong>Publicar</strong> hace los cambios efectivos para los usuarios reales.</div></li>
+          <li class="faq-item"><button class="faq-question">¿Qué significa el estado "En espera" en los Logs? <span class="faq-icon"><i class="fas fa-plus"></i></span></button><div class="faq-answer">Que la ejecución fue iniciada pero está esperando una respuesta del usuario o de un sistema externo. No es necesariamente un error.</div></li>
+          <li class="faq-item"><button class="faq-question">¿Qué pasa si elimino un Proyecto? <span class="faq-icon"><i class="fas fa-plus"></i></span></button><div class="faq-answer">Se elimina permanentemente junto con su canvas, Skills y configuraciones. Esta acción no se puede deshacer. Se recomienda desactivar en lugar de eliminar.</div></li>
+          <li class="faq-item"><button class="faq-question">¿Cómo conecto Datum V2 con Claude o ChatGPT? <span class="faq-icon"><i class="fas fa-plus"></i></span></button><div class="faq-answer">En Datum V2 → Settings → MCP. Copia la URL MCP generada y configúrala en la herramienta de IA correspondiente siguiendo la guía de instalación.</div></li>
+          <li class="faq-item"><button class="faq-question">¿Cuál es la diferencia entre Logs y Debugger? <span class="faq-icon"><i class="fas fa-plus"></i></span></button><div class="faq-answer">Los <strong>Logs</strong> muestran ejecuciones técnicas de Skills y Tools. El <strong>Debugger</strong> muestra la conversación completa del usuario con todos sus mensajes.</div></li>
+          <li class="faq-item"><button class="faq-question">"Error: Variable no definida" — ¿cómo lo resuelvo? <span class="faq-icon"><i class="fas fa-plus"></i></span></button><div class="faq-answer">Verifica: (1) el nombre de la variable es correcto, (2) el nodo anterior la genera, (3) el mapeo entre nodos está bien configurado.</div></li>
+          <li class="faq-item"><button class="faq-question">¿Cuántos nodos puedo tener en un flujo? <span class="faq-icon"><i class="fas fa-plus"></i></span></button><div class="faq-answer">No hay límite técnico, pero se recomienda máximo 50-100 nodos por flujo. Para flujos más complejos, divide en Skills separados para facilitar el mantenimiento.</div></li>
+        </ul>
+      </div>
+      <div id="brain-guides" class="tab-content">
+        <h4 style="font-size:16px;font-weight:700;color:var(--dark);margin-bottom:20px">Crear un Skill Reutilizable</h4>
+        <div class="steps">
+          <div class="step"><div class="step-num"></div><div class="step-content"><strong>Panel izquierdo → Skills → (+)</strong><p>Asigna nombre y descripción al skill.</p></div></div>
+          <div class="step"><div class="step-num"></div><div class="step-content"><strong>Arrastra un nodo "Code"</strong><p>Aquí va la lógica del skill.</p></div></div>
+          <div class="step"><div class="step-num"></div><div class="step-content"><strong>Define entradas y salidas</strong><p>Ej: entrada <code>email (String)</code>, salida <code>valido (Boolean)</code>.</p></div></div>
+          <div class="step"><div class="step-num"></div><div class="step-content"><strong>Prueba con datos reales</strong><p>Haz clic en "Probar" y verifica la salida.</p></div></div>
+          <div class="step"><div class="step-num"></div><div class="step-content"><strong>Guarda y úsalo en proyectos</strong><p>Arrastra el skill al canvas de cualquier agente.</p></div></div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ==================== DATUM ==================== -->
+  <div id="datum" class="doc-section">
+    <div class="doc-section-header">
+      <div class="doc-section-icon" style="background:linear-gradient(135deg,#4facfe,#00f2fe)"><i class="fas fa-database" style="color:white"></i></div>
+      <div>
+        <h3>Datum & Datum V2</h3>
+        <p>Gestión de bases de datos con API REST nativa e integración MCP</p>
+        <div class="doc-section-url">datum.jelou.ai</div>
+      </div>
+    </div>
+    <div class="doc-section-body">
+      <div class="tabs">
+        <button class="tab-btn active" onclick="switchTab(this,'datum-diff')">Comparativa</button>
+        <button class="tab-btn" onclick="switchTab(this,'datum-mcp')">MCP (IA)</button>
+        <button class="tab-btn" onclick="switchTab(this,'datum-faqs')">FAQs</button>
+      </div>
+      <div id="datum-diff" class="tab-content active">
+        <p style="margin-bottom:20px;color:var(--text-muted)">Jelou tiene dos sistemas de bases de datos: el clásico para uso general y Datum V2 con capacidades avanzadas para desarrolladores.</p>
+        <table class="doc-table">
+          <thead><tr><th>Característica</th><th>Datum (Clásico)</th><th>Datum V2</th></tr></thead>
+          <tbody>
+            <tr><td>API REST nativa</td><td>❌ No</td><td>✅ Sí</td></tr>
+            <tr><td>Monitoreo CPU/RAM/Storage</td><td>❌ No</td><td>✅ Sí</td></tr>
+            <tr><td>Triggers/Webhooks</td><td>❌ No</td><td>✅ Sí</td></tr>
+            <tr><td>Integración MCP (Claude/ChatGPT)</td><td>❌ No</td><td>✅ Sí</td></tr>
+            <tr><td>Gestión de API Keys</td><td>❌ No</td><td>✅ Sí</td></tr>
+            <tr><td>URL de acceso</td><td><code>/datum/databases</code></td><td><code>datum.jelou.ai</code></td></tr>
+          </tbody>
+        </table>
+      </div>
+      <div id="datum-mcp" class="tab-content">
+        <p style="margin-bottom:20px;color:var(--text-muted)">MCP (Model Context Protocol) permite conectar Datum V2 directamente como herramienta de IA para Claude, ChatGPT, Cursor y VS Code.</p>
+        <table class="doc-table" style="margin-bottom:24px">
+          <thead><tr><th>Herramienta</th><th>Cómo conectar</th></tr></thead>
+          <tbody>
+            <tr><td><strong>Claude</strong></td><td>Settings → MCP → copiar URL → configurar en Claude</td></tr>
+            <tr><td><strong>ChatGPT</strong></td><td>Settings → Connectors → URL MCP</td></tr>
+            <tr><td><strong>Cursor</strong></td><td>Integración nativa con el IDE</td></tr>
+            <tr><td><strong>VS Code</strong></td><td>Extensión de conexión MCP</td></tr>
+          </tbody>
+        </table>
+        <div style="background:var(--primary-light);border:1px solid rgba(0,200,160,0.3);border-radius:10px;padding:16px">
+          <strong style="color:var(--primary-dark)">¿Qué permite hacer MCP?</strong>
+          <p style="font-size:14px;color:var(--text-muted);margin-top:6px">Una vez conectado, Claude puede leer, consultar y escribir en las colecciones de Datum V2 directamente en lenguaje natural, sin necesidad de escribir código SQL.</p>
+        </div>
+      </div>
+      <div id="datum-faqs" class="tab-content">
+        <ul class="faq-list">
+          <li class="faq-item"><button class="faq-question">¿Cuál es la diferencia entre Datum y Datum V2? <span class="faq-icon"><i class="fas fa-plus"></i></span></button><div class="faq-answer">Datum es el gestor de bases de datos clásico de Jelou. Datum V2 es una plataforma dedicada (datum.jelou.ai) con API REST nativa, monitoreo de recursos, triggers y compatibilidad MCP para IA.</div></li>
+          <li class="faq-item"><button class="faq-question">¿Qué es un Trigger en Datum V2? <span class="faq-icon"><i class="fas fa-plus"></i></span></button><div class="faq-answer">Una acción automática que se ejecuta cuando ocurre un evento en la base de datos (insertar, actualizar o eliminar un registro). Se pueden conectar a URLs externas (webhooks) para notificar a otros sistemas.</div></li>
+          <li class="faq-item"><button class="faq-question">¿Los datos en Datum son compartidos entre proyectos? <span class="faq-icon"><i class="fas fa-plus"></i></span></button><div class="faq-answer">Sí. Datum es un recurso de la cuenta (empresa), no de un proyecto específico. Todos los agentes con acceso a una base de datos la comparten.</div></li>
+        </ul>
+      </div>
+    </div>
+  </div>
+
+  <!-- ==================== MARKETPLACE ==================== -->
+  <div id="marketplace" class="doc-section">
+    <div class="doc-section-header">
+      <div class="doc-section-icon" style="background:linear-gradient(135deg,#f093fb,#f5576c)"><i class="fas fa-store" style="color:white"></i></div>
+      <div>
+        <h3>Marketplace</h3>
+        <p>19+ integraciones y templates listos para instalar</p>
+        <div class="doc-section-url">/marketplace</div>
+      </div>
+    </div>
+    <div class="doc-section-body">
+      <div class="tabs">
+        <button class="tab-btn active" onclick="switchTab(this,'market-catalog')">Catálogo</button>
+        <button class="tab-btn" onclick="switchTab(this,'market-templates')">Templates</button>
+        <button class="tab-btn" onclick="switchTab(this,'market-faqs')">FAQs</button>
+      </div>
+      <div id="market-catalog" class="tab-content active">
+        <table class="doc-table">
+          <thead><tr><th>Integración</th><th>Categoría</th><th>Descripción</th></tr></thead>
+          <tbody>
+            <tr><td><strong>Jelou KYC</strong></td><td>Identidad & Firma</td><td>Validación de identidad en WhatsApp</td></tr>
+            <tr><td><strong>Jelou Sign</strong></td><td>Identidad & Firma</td><td>Firma electrónica con validez legal</td></tr>
+            <tr><td><strong>Shopify</strong></td><td>E-commerce</td><td>Plataforma de comercio electrónico</td></tr>
+            <tr><td><strong>Stripe</strong></td><td>E-commerce</td><td>Pasarela de pagos</td></tr>
+            <tr><td><strong>WooCommerce</strong></td><td>E-commerce</td><td>Ecommerce para WordPress</td></tr>
+            <tr><td><strong>Mercado Pago</strong></td><td>E-commerce</td><td>Pagos LATAM</td></tr>
+            <tr><td><strong>Bitrix24</strong></td><td>CRM & Ventas</td><td>CRM completo</td></tr>
+            <tr><td><strong>Odoo</strong></td><td>CRM & Ventas</td><td>ERP de código abierto</td></tr>
+            <tr><td><strong>Contifico</strong></td><td>Facturación</td><td>ERP en la nube (Ecuador)</td></tr>
+            <tr><td><strong>Siigo</strong></td><td>Facturación</td><td>Contabilidad (Colombia)</td></tr>
+            <tr><td><strong>Datil</strong></td><td>Facturación</td><td>Facturación electrónica (Ecuador)</td></tr>
+            <tr><td><strong>Facturama</strong></td><td>Facturación</td><td>CFDIs 4.0 (México)</td></tr>
+            <tr><td><strong>Calendly</strong></td><td>Agendamiento</td><td>Gestión de citas</td></tr>
+            <tr><td><strong>Supabase</strong></td><td>Analítica & Datos</td><td>Backend-as-a-Service</td></tr>
+            <tr><td><strong>Meta Ads</strong></td><td>Analítica & Datos</td><td>Publicidad Facebook/Instagram</td></tr>
+          </tbody>
+        </table>
+      </div>
+      <div id="market-templates" class="tab-content">
+        <p style="margin-bottom:16px;color:var(--text-muted)">La pestaña <strong>Developers</strong> del Marketplace contiene <strong>15 Skills Templates</strong> y <strong>10 Tools Templates</strong> listos para instalar y personalizar.</p>
+        <table class="doc-table">
+          <thead><tr><th>Skill Template</th><th>Descripción</th></tr></thead>
+          <tbody>
+            <tr><td>Agente de Biometría</td><td>Validación biométrica para países LATAM</td></tr>
+            <tr><td>Agente Prueba de Vida</td><td>Detecta si el usuario es una persona viva</td></tr>
+            <tr><td>Agente Document Check</td><td>Verificación de documentos con IA</td></tr>
+            <tr><td>Agente OTP</td><td>Validación OTP y envío al cliente</td></tr>
+            <tr><td>Sign - Firma electrónica</td><td>Firma electrónica One Shot</td></tr>
+            <tr><td>Términos y condiciones</td><td>Aceptación de normas de privacidad</td></tr>
+            <tr><td>Payments - Pago con tarjeta</td><td>Implementación de pagos con tarjeta</td></tr>
+            <tr><td>Agente HIL</td><td>Derivación a Human In the Loop</td></tr>
+          </tbody>
+        </table>
+      </div>
+      <div id="market-faqs" class="tab-content">
+        <ul class="faq-list">
+          <li class="faq-item"><button class="faq-question">¿Las integraciones del Marketplace tienen costo adicional? <span class="faq-icon"><i class="fas fa-plus"></i></span></button><div class="faq-answer">Depende de la integración. Algunas son gratuitas y otras requieren suscripción al servicio externo (ej. Stripe, Shopify). Jelou no cobra comisión adicional.</div></li>
+          <li class="faq-item"><button class="faq-question">¿Puedo solicitar una integración que no está en el catálogo? <span class="faq-icon"><i class="fas fa-plus"></i></span></button><div class="faq-answer">Sí. En Marketplace → panel izquierdo → "Solicita una integración" → "Enviar una solicitud". El equipo de Jelou evalúa las solicitudes.</div></li>
+          <li class="faq-item"><button class="faq-question">¿Puedo usar múltiples integraciones en el mismo agente? <span class="faq-icon"><i class="fas fa-plus"></i></span></button><div class="faq-answer">Sí. Puedes agregar múltiples Tools de distintas integraciones al mismo Proyecto. Por ejemplo, WooCommerce para consultar productos y Stripe para procesar pagos simultáneamente.</div></li>
+        </ul>
+      </div>
+    </div>
+  </div>
+
+  <!-- ==================== LOGS & DEBUGGER ==================== -->
+  <div id="logs-debugger" class="doc-section">
+    <div class="doc-section-header">
+      <div class="doc-section-icon" style="background:linear-gradient(135deg,#43e97b,#38f9d7)"><i class="fas fa-magnifying-glass-chart" style="color:white"></i></div>
+      <div>
+        <h3>Logs & Debugger</h3>
+        <p>Diagnóstico de ejecuciones y conversaciones de usuarios</p>
+        <div class="doc-section-url">/execution-logs · /debugger</div>
+      </div>
+    </div>
+    <div class="doc-section-body">
+      <div class="tabs">
+        <button class="tab-btn active" onclick="switchTab(this,'logs-overview')">Resumen</button>
+        <button class="tab-btn" onclick="switchTab(this,'logs-faqs')">FAQs</button>
+      </div>
+      <div id="logs-overview" class="tab-content active">
+        <div class="info-grid" style="margin-bottom:24px">
+          <div class="info-item"><div class="info-label">Logs — URL</div><div class="info-value"><code>/execution-logs</code></div></div>
+          <div class="info-item"><div class="info-label">Debugger — URL</div><div class="info-value"><code>/debugger</code></div></div>
+        </div>
+        <table class="doc-table">
+          <thead><tr><th></th><th>Logs de Brain</th><th>Debugger</th></tr></thead>
+          <tbody>
+            <tr><td><strong>¿Qué muestra?</strong></td><td>Ejecuciones técnicas de Skills y Tools</td><td>Conversación completa del usuario</td></tr>
+            <tr><td><strong>Pestañas</strong></td><td>Skills (31 ejec.) / Tools (89 ejec.)</td><td>Panel de filtros + lista de conversaciones</td></tr>
+            <tr><td><strong>Filtros</strong></td><td>Estado, Canal, Origen, Fechas</td><td>Canal, Usuario, Fecha, Skill ID, Tool ID, Mensaje</td></tr>
+            <tr><td><strong>Detalle</strong></td><td>Traza paso a paso por nodo (ícono 👁)</td><td>Vista completa de la conversación</td></tr>
+            <tr><td><strong>Estados</strong></td><td>Completado ✅ / En espera ⏳ / Error ❌</td><td>—</td></tr>
+          </tbody>
+        </table>
+      </div>
+      <div id="logs-faqs" class="tab-content">
+        <ul class="faq-list">
+          <li class="faq-item"><button class="faq-question">¿Cuál es la diferencia entre Logs y Debugger? <span class="faq-icon"><i class="fas fa-plus"></i></span></button><div class="faq-answer">Los <strong>Logs</strong> muestran ejecuciones técnicas (nodos ejecutados, tiempos, errores). El <strong>Debugger</strong> muestra la conversación real del usuario con todos sus mensajes para diagnóstico desde la perspectiva del cliente.</div></li>
+          <li class="faq-item"><button class="faq-question">No encuentro una conversación en el Debugger, ¿qué puede ser? <span class="faq-icon"><i class="fas fa-plus"></i></span></button><div class="faq-answer">Verifica: (1) el canal seleccionado es el correcto, (2) el rango de fechas cubre el momento de la conversación, (3) usa Filtros avanzados → MENSAJE para buscar por texto.</div></li>
+          <li class="faq-item"><button class="faq-question">¿Cómo identifico en qué nodo falló un flujo? <span class="faq-icon"><i class="fas fa-plus"></i></span></button><div class="faq-answer">Ve a Logs → busca la ejecución → haz clic en el ícono 👁. Se abre la traza paso a paso mostrando exactamente qué nodo falló y el mensaje de error.</div></li>
+        </ul>
+      </div>
+    </div>
+  </div>
+
+  <!-- ==================== GLOSARIO ==================== -->
+  <div id="glosario" style="margin-bottom:60px">
+    <div class="section-header">
+      <div class="section-label"><i class="fas fa-book"></i> Glosario</div>
+      <h2>Términos Clave</h2>
+      <p>Definiciones rápidas de los conceptos más usados en Jelou.AI</p>
+    </div>
+    <div class="glossary-grid">
+      <div class="glossary-item"><div class="glossary-term">Agente</div><div class="glossary-def">Entidad de IA en Brain Studio que entiende y responde con lógica personalizable.</div></div>
+      <div class="glossary-item"><div class="glossary-term">Canvas</div><div class="glossary-def">Área visual de construcción de flujos en Brain Studio. Superficie de trabajo drag-and-drop.</div></div>
+      <div class="glossary-item"><div class="glossary-term">Skill</div><div class="glossary-def">Módulo reutilizable con lógica específica. Se puede usar en múltiples proyectos.</div></div>
+      <div class="glossary-item"><div class="glossary-term">Tool</div><div class="glossary-def">Integración con un servicio externo (API, CRM, pasarela de pago, etc.).</div></div>
+      <div class="glossary-item"><div class="glossary-term">MCP</div><div class="glossary-def">Model Context Protocol — conecta bases de datos directamente con herramientas de IA como Claude o ChatGPT.</div></div>
+      <div class="glossary-item"><div class="glossary-term">Trigger</div><div class="glossary-def">Evento que activa una acción automática en Datum V2 (insertar, actualizar o eliminar registro).</div></div>
+      <div class="glossary-item"><div class="glossary-term">Traza</div><div class="glossary-def">Secuencia detallada de pasos ejecutados en un flujo, visible en el detalle de un Log.</div></div>
+      <div class="glossary-item"><div class="glossary-term">SKU</div><div class="glossary-def">Stock Keeping Unit — código único que identifica un producto en el catálogo de Shop.</div></div>
+      <div class="glossary-item"><div class="glossary-term">HSM</div><div class="glossary-def">Highly Structured Message — plantilla de mensaje aprobada para envíos masivos por WhatsApp.</div></div>
+      <div class="glossary-item"><div class="glossary-term">Colección</div><div class="glossary-def">Tabla de datos dentro de Datum V2. Equivalente a una tabla en una base de datos relacional.</div></div>
+      <div class="glossary-item"><div class="glossary-term">Debugger</div><div class="glossary-def">Herramienta de Brain Studio para inspeccionar conversaciones reales de usuarios finales.</div></div>
+      <div class="glossary-item"><div class="glossary-term">Human Attention</div><div class="glossary-def">Nodo de Brain Studio que transfiere la conversación a un agente humano en Connect.</div></div>
+    </div>
+  </div>
+
+  <!-- CONTACT -->
+  <div class="contact-section">
+    <h2>¿Necesitas ayuda adicional?</h2>
+    <p>El equipo de soporte de Jelou está disponible para resolver cualquier duda.</p>
+    <div class="contact-cards">
+      <a href="mailto:support@jelou.ai" class="contact-card"><i class="fas fa-envelope"></i><span>support@jelou.ai</span></a>
+      <a href="https://docs.jelou.ai" target="_blank" class="contact-card"><i class="fas fa-book-open"></i><span>Documentación Oficial</span></a>
+      <a href="https://apps.jelou.ai" target="_blank" class="contact-card"><i class="fas fa-arrow-up-right-from-square"></i><span>Ir a Jelou.AI</span></a>
+    </div>
+  </div>
+</main>
+
+<!-- ===== FOOTER ===== -->
+<footer>
+  <div class="footer-inner">
+    <div class="footer-logo"><span><span style="color:var(--primary)">Jelou</span> Soporte — Documentación Central</span></div>
+    <p>Actualizado el 26/03/2026 · <a href="https://docs.jelou.ai" target="_blank">docs.jelou.ai</a> · <a href="mailto:support@jelou.ai">support@jelou.ai</a></p>
+  </div>
+</footer>
+
+<!-- ===== CHATBOT ===== -->
+<button id="chat-btn" onclick="toggleChat()" title="Pregúntale a Claude">
+  <i class="fas fa-robot"></i>
+  <span class="chat-label">Pregúntale a Claude</span>
+</button>
+
+<div id="chat-panel">
+  <div class="chat-header">
+    <div class="chat-avatar"><i class="fas fa-robot"></i></div>
+    <div class="chat-header-info">
+      <h4>Asistente Jelou</h4>
+      <p><span class="online-dot"></span>Powered by Claude · Soporte 24/7</p>
+    </div>
+    <button class="chat-close" onclick="toggleChat()"><i class="fas fa-xmark"></i></button>
+  </div>
+  <div id="chat-messages">
+    <div class="msg bot"><div class="bubble">¡Hola! Soy el asistente de soporte de Jelou, potenciado por Claude. Puedo responder preguntas sobre <strong>Connect</strong>, <strong>Brain Studio</strong>, <strong>Datum</strong>, <strong>Marketplace</strong> y más.<br><br>Para activarme, necesito tu API Key de Anthropic (se guarda solo en tu navegador).</div></div>
+  </div>
+  <div id="chat-api-setup">
+    <p>Ingresa tu <a href="https://console.anthropic.com/settings/keys" target="_blank">API Key de Anthropic</a> para activar el chatbot:</p>
+    <input type="password" id="api-key-input" placeholder="sk-ant-api03-..." />
+    <button id="api-key-btn" onclick="saveApiKey()">Activar Asistente</button>
+  </div>
+  <div class="chat-input-area" id="chat-input-area" style="display:none">
+    <textarea id="chat-input" rows="1" placeholder="Escribe tu pregunta sobre Jelou..." onkeydown="handleChatKey(event)" oninput="autoResize(this)"></textarea>
+    <button id="chat-send" onclick="sendMessage()"><i class="fas fa-paper-plane"></i></button>
+  </div>
+</div>
+
+<!-- ===== JAVASCRIPT ===== -->
+<script>
+// ===== SEARCH =====
+const searchData = [
+  { section:"Connect", q:"¿Qué es Connect?", a:"Módulo central para gestionar conversaciones, campañas, clientes y catálogo de productos." },
+  { section:"Connect – Panel Multiagente", q:"¿Qué son los chats No Gestionados?", a:"Conversaciones que aún no han recibido respuesta de ningún agente." },
+  { section:"Connect – Campañas", q:"¿Cómo envío una campaña masiva?", a:"Campañas → + Enviar campaña → completa formulario → selecciona destinatarios → confirma." },
+  { section:"Connect – Campañas", q:"¿Puedo editar una campaña enviada?", a:"No, una campaña enviada no se puede editar. Crea una nueva si necesitas cambios." },
+  { section:"Connect – Monitoreo", q:"¿Qué significa 'Por recuperar' en Monitoreo?", a:"Conversaciones abiertas que requieren acción urgente y están esperando respuesta." },
+  { section:"Connect – Shop", q:"¿Qué es el SKU?", a:"Código único de producto. Ejemplo: BOT-001, ZAPATO-NEGRO-42." },
+  { section:"Brain Studio", q:"¿Necesito programar para usar Brain Studio?", a:"No. La mayoría se hace visualmente. El nodo Code permite JavaScript para lógica avanzada." },
+  { section:"Brain Studio – Nodos", q:"¿Qué hace el nodo Logic?", a:"Crea ramificaciones IF/ELSE en el flujo basadas en condiciones y variables." },
+  { section:"Brain Studio – Nodos", q:"¿Qué hace el nodo Human Attention?", a:"Transfiere la conversación a un agente humano en Connect." },
+  { section:"Brain Studio – Proyectos", q:"¿Qué pasa si elimino un Proyecto?", a:"Se elimina permanentemente con su canvas, Skills y configuraciones. Desactiva en vez de eliminar." },
+  { section:"Datum V2", q:"¿Qué es el MCP en Datum V2?", a:"Protocolo que conecta la base de datos directamente con Claude, ChatGPT, Cursor o VS Code." },
+  { section:"Datum V2", q:"¿Cómo importo datos a Datum V2?", a:"Ícono de carga (↑) → Imports → + New Import → selecciona archivo y colección destino." },
+  { section:"Marketplace", q:"¿Qué integraciones hay en Marketplace?", a:"19+ integraciones: Shopify, Stripe, WooCommerce, Bitrix24, Calendly, Contifico, Datil, Odoo y más." },
+  { section:"Marketplace – Templates", q:"¿Qué son los Skills Templates?", a:"Flujos completos prediseñados por Jelou: biometría, firma digital, pagos, OTP, KYC, etc." },
+  { section:"Logs & Debugger", q:"¿Cuál es la diferencia entre Logs y Debugger?", a:"Logs: ejecuciones técnicas de nodos. Debugger: conversación completa del usuario final." },
+  { section:"Logs & Debugger", q:"¿Cómo encuentro en qué nodo falló un flujo?", a:"Logs → busca la ejecución → ícono 👁 → se abre la traza paso a paso por nodo." },
+];
+
+const searchInput = document.getElementById('search-input');
+const searchResults = document.getElementById('search-results');
+
+searchInput.addEventListener('input', () => {
+  const q = searchInput.value.trim().toLowerCase();
+  if (q.length < 2) { searchResults.style.display = 'none'; return; }
+  const matches = searchData.filter(d => d.q.toLowerCase().includes(q) || d.a.toLowerCase().includes(q) || d.section.toLowerCase().includes(q)).slice(0, 6);
+  if (!matches.length) { searchResults.style.display = 'none'; return; }
+  searchResults.innerHTML = matches.map(m => `
+    <div class="search-result-item" onclick="showSearchResult('${m.q.replace(/'/g,"\\'")}','${m.a.replace(/'/g,"\\'")}','${m.section.replace(/'/g,"\\'")}')">
+      <div class="result-section">${m.section}</div>
+      <div class="result-question">${m.q}</div>
+      <div class="result-answer">${m.a}</div>
+    </div>`).join('');
+  searchResults.style.display = 'block';
+});
+
+function doSearch() {
+  searchInput.dispatchEvent(new Event('input'));
+}
+
+function showSearchResult(q, a, section) {
+  searchResults.style.display = 'none';
+  searchInput.value = '';
+  toggleChat();
+  setTimeout(() => {
+    addMessage('bot', `<strong>${section}</strong><br><br><em>— ${q}</em><br><br>${a}`);
+  }, 300);
+}
+
+document.addEventListener('click', e => {
+  if (!e.target.closest('.search-box')) searchResults.style.display = 'none';
+});
+
+// ===== TABS =====
+function switchTab(btn, contentId) {
+  const section = btn.closest('.doc-section-body') || btn.closest('.doc-section');
+  section.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+  section.querySelectorAll('.tab-content').forEach(c => c.classList.remove('active'));
+  btn.classList.add('active');
+  document.getElementById(contentId).classList.add('active');
+}
+
+// ===== FAQ ACCORDION =====
+document.querySelectorAll('.faq-question').forEach(btn => {
+  btn.addEventListener('click', () => {
+    const item = btn.parentElement;
+    const isOpen = item.classList.contains('open');
+    btn.closest('.faq-list').querySelectorAll('.faq-item').forEach(i => i.classList.remove('open'));
+    if (!isOpen) item.classList.add('open');
+  });
+});
+
+// ===== CHATBOT =====
+let apiKey = localStorage.getItem('jelou_claude_key') || '';
+let chatOpen = false;
+let chatHistory = [];
+
+const SYSTEM_PROMPT = `Eres el asistente de soporte de Jelou.AI, especializado en responder preguntas sobre los productos Connect y Brain Studio de Jelou.
+
+CONOCIMIENTO BASE:
+CONNECT: módulo de gestión de conversaciones. Tiene Panel Multiagente (/pma/chats), Campañas (/hsm/campaigns), Monitoreo (/monitoring/live/chats), Clientes (/clients/conversation), Shop (/shop/products). Panel Multiagente: gestiona chats en tiempo real, filtros Todos/No Gestionados, envío masivo. Campañas: mensajes masivos con plantillas y variables como {{nombre}}. No se pueden editar después de enviadas. Monitoreo: métricas en tiempo real - Primera Respuesta buena < 1min, Promedio Respuesta < 1min. Clientes: base de contactos, exportación CSV/Excel. Shop: catálogo con SKU, precio, stock, categorías, imágenes.
+
+BRAIN STUDIO: plataforma visual de agentes IA sin código en apps.jelou.ai/brain. 10 nodos: AI Agent (IA), Message (mensajes), API (llamadas externas), Code (JavaScript), Logic (IF/ELSE), Datum (BD), Notes (documentación), Human Attention (escalar humano), Skills (módulos reutilizables), Tools (integraciones). Proyectos: organizan agentes con Skills, Tools y canal. Canvas: área visual de construcción. Logs (/execution-logs): registro de ejecuciones de Skills y Tools con traza paso a paso. Debugger (/debugger): conversaciones completas de usuarios, filtros por canal/fecha/mensaje/Skill ID.
+
+DATUM: base de datos clásica en /datum/databases. Datum V2 (datum.jelou.ai): plataforma avanzada con API REST, Collections, Imports, Monitor (CPU/RAM/Storage), Settings con API Keys, Triggers y MCP. MCP conecta Datum V2 con Claude, ChatGPT, Cursor, VS Code.
+
+MARKETPLACE (/marketplace): 19+ integraciones - Shopify, Stripe, WooCommerce, Mercado Pago, Bitrix24, Odoo, Contifico, Siigo, Datil, Facturama, Calendly, Supabase, Meta Ads, Jelou KYC, Jelou Sign. Pestañas: Catálogo, Instaladas, Developers (15 Skills Templates + 10 Tools Templates).
+
+INSTRUCCIONES:
+- Responde siempre en español
+- Sé conciso y directo, máximo 3-4 oraciones por respuesta
+- Si no sabes algo, dirige al usuario a docs.jelou.ai o support@jelou.ai
+- Usa markdown básico para resaltar conceptos clave
+- No inventes funcionalidades que no mencioné`;
+
+function toggleChat() {
+  chatOpen = !chatOpen;
+  const panel = document.getElementById('chat-panel');
+  panel.classList.toggle('open', chatOpen);
+  const btn = document.getElementById('chat-btn');
+  btn.innerHTML = chatOpen ? '<i class="fas fa-xmark"></i>' : '<i class="fas fa-robot"></i><span class="chat-label">Pregúntale a Claude</span>';
+  if (chatOpen) initChat();
+}
+
+function initChat() {
+  if (apiKey) {
+    document.getElementById('chat-api-setup').style.display = 'none';
+    document.getElementById('chat-input-area').style.display = 'flex';
+    document.getElementById('chat-input').focus();
+  } else {
+    document.getElementById('chat-api-setup').style.display = 'block';
+    document.getElementById('chat-input-area').style.display = 'none';
+  }
+}
+
+function saveApiKey() {
+  const val = document.getElementById('api-key-input').value.trim();
+  if (!val.startsWith('sk-ant-')) {
+    alert('Por favor ingresa una API Key válida de Anthropic (debe comenzar con sk-ant-)');
+    return;
+  }
+  apiKey = val;
+  localStorage.setItem('jelou_claude_key', apiKey);
+  document.getElementById('chat-api-setup').style.display = 'none';
+  document.getElementById('chat-input-area').style.display = 'flex';
+  addMessage('bot', '✅ ¡Listo! Ahora puedo responder tus preguntas sobre Jelou.AI. ¿En qué puedo ayudarte?');
+  document.getElementById('chat-input').focus();
+}
+
+function addMessage(role, text) {
+  const msgs = document.getElementById('chat-messages');
+  const div = document.createElement('div');
+  div.className = `msg ${role}`;
+  div.innerHTML = `<div class="bubble">${text}</div>`;
+  msgs.appendChild(div);
+  msgs.scrollTop = msgs.scrollHeight;
+  return div;
+}
+
+function addTyping() {
+  const msgs = document.getElementById('chat-messages');
+  const div = document.createElement('div');
+  div.className = 'msg bot';
+  div.id = 'typing-indicator';
+  div.innerHTML = '<div class="bubble"><div class="typing-dots"><span></span><span></span><span></span></div></div>';
+  msgs.appendChild(div);
+  msgs.scrollTop = msgs.scrollHeight;
+}
+
+function removeTyping() {
+  const t = document.getElementById('typing-indicator');
+  if (t) t.remove();
+}
+
+async function sendMessage() {
+  const input = document.getElementById('chat-input');
+  const text = input.value.trim();
+  if (!text || !apiKey) return;
+  input.value = '';
+  input.style.height = 'auto';
+  document.getElementById('chat-send').disabled = true;
+  addMessage('user', text);
+  chatHistory.push({ role: 'user', content: text });
+  addTyping();
+  try {
+    const response = await fetch('https://api.anthropic.com/v1/messages', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        'x-api-key': apiKey,
+        'anthropic-version': '2023-06-01',
+        'anthropic-dangerous-direct-browser-access': 'true'
+      },
+      body: JSON.stringify({
+        model: 'claude-haiku-4-5-20251001',
+        max_tokens: 512,
+        system: SYSTEM_PROMPT,
+        messages: chatHistory.slice(-10)
+      })
+    });
+    const data = await response.json();
+    removeTyping();
+    if (data.content && data.content[0]) {
+      const reply = data.content[0].text;
+      chatHistory.push({ role: 'assistant', content: reply });
+      addMessage('bot', reply.replace(/\*\*(.*?)\*\*/g,'<strong>$1</strong>').replace(/\n/g,'<br>'));
+    } else if (data.error) {
+      if (data.error.type === 'authentication_error') {
+        addMessage('bot', '❌ API Key inválida. <a href="#" onclick="resetKey()">Cambiar API Key</a>');
+      } else {
+        addMessage('bot', `❌ Error: ${data.error.message}`);
+      }
+    }
+  } catch (e) {
+    removeTyping();
+    addMessage('bot', '❌ Error de conexión. Verifica tu API Key y conexión a internet.');
+  }
+  document.getElementById('chat-send').disabled = false;
+  document.getElementById('chat-input').focus();
+}
+
+function resetKey() {
+  apiKey = '';
+  localStorage.removeItem('jelou_claude_key');
+  document.getElementById('chat-api-setup').style.display = 'block';
+  document.getElementById('chat-input-area').style.display = 'none';
+}
+
+function handleChatKey(e) {
+  if (e.key === 'Enter' && !e.shiftKey) { e.preventDefault(); sendMessage(); }
+}
+
+function autoResize(el) {
+  el.style.height = 'auto';
+  el.style.height = Math.min(el.scrollHeight, 100) + 'px';
+}
+
+// Init
+if (apiKey) {
+  document.getElementById('chat-api-setup').style.display = 'none';
+}
+</script>
+</body>
+</html>
